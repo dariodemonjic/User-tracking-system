@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Analytics Test Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .cart-badge {
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            position: relative;
+            top: -8px;
+            margin-left: 4px;
+        }
+        
+        /* Page Content */
+        .page {
+            display: none;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: #f8f9fa;
+            padding: 3rem 0;
+            margin: 3rem 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Banner Ad */
+        .banner-ad {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .banner-ad:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .banner-ad-content {
+            flex: 1;
+        }
+        
+        .banner-ad h3 {
+            margin: 0 0 0.5rem 0;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .banner-ad p {
+            margin: 0;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .banner-ad-cta {
+            background: white;
+            color: #FF6B6B;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        /* Sidebar Ad */
+        .sidebar-ad {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .sidebar-ad:hover {
+            border-color: #667eea;
+        }
+        
+        .sidebar-ad-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-ad h4 {
+            margin: 0.5rem 0;
+            color: #333;
+        }
+        
+        .sidebar-ad p {
+            color: #666;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-ad .btn {
+            margin-top: 1rem;
+        }
+        
+        /* Newsletter Form */
+        .newsletter-form {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .newsletter-form input {
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 0.25rem 0;
+        }
+        
+        .footer-section a:hover {
+            color: #667eea;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        /* Tracking Console */
+        .tracking-console {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 400px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1500;
+        }
+        
+        .console-line {
+            margin: 4px 0;
+        }
+        
+        .toggle-console {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e1e1e;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1501;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1500;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo" onclick="event.preventDefault(); setTimeout(() => navigateTo('home'), 100)">🚀 TechStore</a>
+            <ul>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('home'), 100)" data-page="home" class="active">Home</a></li>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('products'), 100)" data-page="products">Products</a></li>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('about'), 100)" data-page="about">About</a></li>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('contact'), 100)" data-page="contact">Contact</a></li>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('account'), 100)" data-page="account">Account</a></li>
+                <li><a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('cart'), 100)" data-page="cart">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="container">
+                <h1>Welcome to TechStore</h1>
+                <p>Your one-stop shop for all things tech. Perfect for analytics testing!</p>
+                <a href="#" class="btn" onclick="event.preventDefault();setTimeout(() => navigateTo('products'), 100)">Shop Now</a>
+            </div>
+        </div>
+        
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="product-grid">
+                <div class="product-card" onclick="viewProduct('laptop-pro')">
+                    <div class="product-image">💻</div>
+                    <div class="product-info">
+                        <h3 class="product-title">Laptop Pro</h3>
+                        <p class="product-price">$1,299</p>
+                        <p class="product-description">High-performance laptop for professionals</p>
+                        <button class="btn btn-primary" onclick="addToCart('Laptop Pro', 1299);">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="viewProduct('smartphone-x')">
+                    <div class="product-image">📱</div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smartphone X</h3>
+                        <p class="product-price">$899</p>
+                        <p class="product-description">Latest flagship smartphone</p>
+                        <button class="btn btn-primary" onclick="addToCart('Smartphone X', 899);">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="viewProduct('wireless-headphones')">
+                    <div class="product-image">🎧</div>
+                    <div class="product-info">
+                        <h3 class="product-title">Wireless Headphones</h3>
+                        <p class="product-price">$299</p>
+                        <p class="product-description">Premium noise-cancelling headphones</p>
+                        <button class="btn btn-primary" onclick="addToCart('Wireless Headphones', 299);">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Banner Ad -->
+            <div class="banner-ad" onclick="trackAdClick('banner-home-special-offer', 'banner')">
+                <div class="banner-ad-content">
+                    <h3>🎉 Special Offer: Save 20% Today!</h3>
+                    <p>Use code TECH20 at checkout - Limited time only</p>
+                </div>
+                <a href="#" class="banner-ad-cta" onclick="trackAdClick('banner-home-special-offer', 'banner-cta');">Shop Now</a>
+            </div>
+            
+            <!-- Newsletter Signup Form -->
+            <div class="newsletter-form">
+                <span class="sidebar-ad-badge">NEWSLETTER</span>
+                <h4>📧 Stay Updated with Tech News</h4>
+                <p>Get the latest deals and tech insights delivered to your inbox</p>
+                <form id="newsletterForm" name="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                    <input type="email" id="newsletter-email" name="email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn btn-primary">Subscribe to Newsletter</button>
+                </form>
+            </div>
+            
+            <div class="stats">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>50K+</h3>
+                        <p>Happy Customers</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>1000+</h3>
+                        <p>Products</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>99.9%</h3>
+                        <p>Uptime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products" class="page">
+        <div class="container">
+            <h1>All Products</h1>
+            
+            <div style="margin: 2rem 0;">
+                <label for="category-filter">Filter by Category:</label>
+                <select id="category-filter" name="category-filter" onchange="filterProducts(this.value)">
+                    <option value="all">All Categories</option>
+                    <option value="computers">Computers</option>
+                    <option value="phones">Phones</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="gaming">Gaming</option>
+                </select>
+            </div>
+            
+            <!-- Grid with sidebar for ads -->
+            <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 2rem;">
+                <!-- Products Grid -->
+                <div class="product-grid">
+                    <div class="product-card" data-category="computers">
+                        <div class="product-image">🖥️</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Desktop Ultimate</h3>
+                            <p class="product-price">$2,499</p>
+                            <p class="product-description">Powerful desktop computer</p>
+                            <button class="btn btn-primary" onclick="addToCart('Desktop Ultimate', 2499)">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-category="phones">
+                        <div class="product-image">📱</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Tablet Pro</h3>
+                            <p class="product-price">$799</p>
+                            <p class="product-description">Professional tablet</p>
+                            <button class="btn btn-primary" onclick="addToCart('Tablet Pro', 799)">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-category="accessories">
+                        <div class="product-image">⌨️</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Mechanical Keyboard</h3>
+                            <p class="product-price">$149</p>
+                            <p class="product-description">RGB mechanical keyboard</p>
+                            <button class="btn btn-primary" onclick="addToCart('Mechanical Keyboard', 149)">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-category="gaming">
+                        <div class="product-image">🎮</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Gaming Console</h3>
+                            <p class="product-price">$499</p>
+                            <p class="product-description">Next-gen gaming console</p>
+                            <button class="btn btn-primary" onclick="addToCart('Gaming Console', 499)">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-category="accessories">
+                        <div class="product-image">🖱️</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Gaming Mouse</h3>
+                            <p class="product-price">$79</p>
+                            <p class="product-description">High-precision gaming mouse</p>
+                            <button class="btn btn-primary" onclick="addToCart('Gaming Mouse', 79)">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-category="accessories">
+                        <div class="product-image">📷</div>
+                        <div class="product-info">
+                            <h3 class="product-title">Webcam HD</h3>
+                            <p class="product-price">$99</p>
+                            <p class="product-description">1080p HD webcam</p>
+                            <button class="btn btn-primary" onclick="addToCart('Webcam HD', 99)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar with Enhanced Newsletter Form -->
+                <div>
+                    <div class="newsletter-form">
+                        <span class="sidebar-ad-badge">EXCLUSIVE</span>
+                        <h4>📧 Tech Tips Weekly</h4>
+                        <p>Join 10,000+ subscribers for the latest tech news and deals</p>
+                        <form id="sidebarNewsletterForm" name="sidebar-newsletter-form" onsubmit="handleSidebarNewsletterSubmit(event)">
+                            <input type="email" id="sidebar-newsletter-email" name="email" placeholder="Your email address" required>
+                            <input type="text" id="sidebar-newsletter-interests" name="interests" placeholder="Interests (optional)">
+                            <button type="submit" class="btn btn-primary">Subscribe Now</button>
+                        </form>
+                    </div>
+                    
+                    <div class="sidebar-ad" onclick="trackAdClick('sidebar-products-premium', 'sidebar')">
+                        <span class="sidebar-ad-badge">PREMIUM</span>
+                        <h4>⭐ Upgrade to Pro</h4>
+                        <p>Get free shipping, extended warranty, and priority support</p>
+                        <p style="font-size: 1.2rem; font-weight: bold; color: #667eea;">$9.99/month</p>
+                        <button class="btn" onclick="trackAdClick('sidebar-products-premium', 'sidebar-cta');">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <h1>About TechStore</h1>
+            
+            <div style="max-width: 800px; margin: 2rem auto;">
+                <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem;">
+                    TechStore is a leading online retailer specializing in cutting-edge technology products. 
+                    Founded in 2020, we've quickly grown to serve over 50,000 happy customers worldwide.
+                </p>
+                
+                <h2>Our Mission</h2>
+                <p style="margin-bottom: 2rem;">
+                    To provide high-quality technology products at competitive prices while delivering 
+                    exceptional customer service and support.
+                </p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">🚚</div>
+                        <h3>Fast Shipping</h3>
+                        <p>Free shipping on orders over $50</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure Payment</h3>
+                        <p>SSL encrypted checkout</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">💯</div>
+                        <h3>Quality Guarantee</h3>
+                        <p>30-day money back guarantee</p>
+                    </div>
+                </div>
+                
+                <div style="height: 1500px; background: linear-gradient(to bottom, #f0f0f0, #ffffff); padding: 2rem; margin-top: 3rem;">
+                    <h2>Our Story (Scroll Test Area)</h2>
+                    <p style="margin-top: 200px;">Keep scrolling to test scroll depth tracking...</p>
+                    <p style="margin-top: 400px;">25% Scroll Depth</p>
+                    <p style="margin-top: 400px;">50% Scroll Depth</p>
+                    <p style="margin-top: 400px;">75% Scroll Depth</p>
+                    <p style="margin-top: 400px;">100% Scroll Depth - You made it!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <h1>Contact Us</h1>
+            
+            <div style="max-width: 600px; margin: 2rem auto;">
+                <form id="contactForm" name="contact-form" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label for="contact-name">Full Name *</label>
+                        <input type="text" id="contact-name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email">Email Address *</label>
+                        <input type="email" id="contact-email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-phone">Phone Number</label>
+                        <input type="tel" id="contact-phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-subject">Subject *</label>
+                        <select id="contact-subject" name="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="sales">Sales Question</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="partnership">Partnership</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-priority">Priority Level</label>
+                        <select id="contact-priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-message">Message *</label>
+                        <textarea id="contact-message" name="message" rows="5" required placeholder="Please describe your inquiry in detail..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="newsletter" value="yes">
+                            Subscribe to our newsletter for updates and special offers
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="terms" required>
+                            I agree to the terms and conditions *
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Page -->
+    <div id="account" class="page">
+        <div class="container">
+            <h1>My Account</h1>
+            
+            <div style="max-width: 600px; margin: 2rem auto;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                    <div>
+                        <h3>Account Menu</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button class="btn" onclick="showAccountSection('profile')">Profile</button>
+                            <button class="btn" onclick="showAccountSection('orders')">Orders</button>
+                            <button class="btn" onclick="showAccountSection('settings')">Settings</button>
+                            <button class="btn" onclick="showAccountSection('logout')">Logout</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <form id="loginForm" name="login-form" onsubmit="handleLogin(event)">
+                            <h2>Login to Your Account</h2>
+                            <div class="form-group">
+                                <label for="login-email">Email Address</label>
+                                <input type="email" id="login-email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <input type="password" id="login-password" name="password" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="login-2fa">Two-Factor Authentication Code</label>
+                                <input type="text" id="login-2fa" name="twoFactor" placeholder="Enter 6-digit code (optional)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="remember"> Remember me for 30 days
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="button" class="btn" onclick="showSignupForm()">Create New Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart" class="page">
+        <div class="container">
+            <h1>Shopping Cart</h1>
+            
+            <div id="cart-items">
+                <p>Your cart is empty. <a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('products'), 100)">Continue shopping</a></p>
+            </div>
+            
+            <div id="cart-summary" style="display: none; max-width: 400px; margin: 2rem auto; padding: 2rem; background: #f8f9fa; border-radius: 8px;">
+                <h3>Order Summary</h3>
+                <p>Subtotal: $<span id="cart-subtotal">0</span></p>
+                <p>Tax (10%): $<span id="cart-tax">0</span></p>
+                <p style="font-size: 1.25rem; font-weight: bold;">Total: $<span id="cart-total">0</span></p>
+                <button class="btn btn-primary" onclick="checkout()" style="width: 100%; margin-top: 1rem;">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('about'), 100)">About Us</a>
+                    <a href="#" onclick="showModal('careers')">Careers</a>
+                    <a href="#" onclick="showModal('press')">Press</a>
+                    <a href="#" onclick="showModal('investors')">Investors</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#" onclick="event.preventDefault(); setTimeout(() => navigateTo('contact'), 100)">Contact</a>
+                    <a href="#" onclick="showModal('faq')">FAQ</a>
+                    <a href="#" onclick="showModal('shipping')">Shipping</a>
+                    <a href="#" onclick="showModal('returns')">Returns</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#" onclick="showModal('privacy')">Privacy Policy</a>
+                    <a href="#" onclick="showModal('terms')">Terms of Service</a>
+                    <a href="#" onclick="showModal('cookies')">Cookie Policy</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <a href="#" onclick="trackSocial('facebook')">Facebook</a>
+                    <a href="#" onclick="trackSocial('twitter')">Twitter</a>
+                    <a href="#" onclick="trackSocial('instagram')">Instagram</a>
+                    <a href="#" onclick="trackSocial('youtube')">YouTube</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; padding-top: 2rem; border-top: 1px solid #34495e;">
+                <p>&copy; 2024 TechStore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Modal Title</h2>
+            <p id="modal-body">Modal content goes here.</p>
+            <button class="btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notification-text">Notification</span>
+    </div>
+
+    <!-- Tracking Console -->
+    <div id="tracking-console" class="tracking-console" style="display: none;">
+        <div style="font-weight: bold; margin-bottom: 10px; color: white;">📊 Analytics Events</div>
+        <div id="console-output"></div>
+    </div>
+    
+    <div class="toggle-console" onclick="toggleConsole()">📊</div>
+
+    <!-- Include the tracker -->
+    <script src="tracker/tracker.js"></script>
+    <script>
+        // Shopping cart
+        let cart = [];
+        let maxScroll = 0;
+        
+        // Console logging
+        function log(message, data) {
+            const output = document.getElementById('console-output');
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            const timestamp = new Date().toLocaleTimeString();
+            line.textContent = `[${timestamp}] ${message}`;
+            if (data) {
+                line.textContent += ': ' + JSON.stringify(data);
+            }
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+            console.log(message, data || '');
+        }
+
+        // Simple navigation
+        function navigateTo(page) {
+            // Just update the UI
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`nav a[data-page="${page}"]`)?.classList.add('active');
+            
+            // Update URL with hash
+            window.location.hash = page;
+            
+            const pageTitles = {
+                'home': 'TechStore - Analytics Test Site',
+                'products': 'Products - TechStore',
+                'about': 'About Us - TechStore',
+                'contact': 'Contact - TechStore',
+                'account': 'My Account - TechStore',
+                'cart': 'Shopping Cart - TechStore'
+            };
+            document.title = pageTitles[page] || 'TechStore';
+            
+            // Log the navigation
+            log(`Navigated to: ${page}`);
+            
+            // Track ad impressions after navigation
+            setTimeout(() => {
+                trackAdImpressions();
+            }, 100);
+            
+            window.scrollTo(0, 0);
+            maxScroll = 0;
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.page) {
+                // Just update UI, tracker will detect the change
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(event.state.page).classList.add('active');
+                document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                document.querySelector(`nav a[data-page="${event.state.page}"]`)?.classList.add('active');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize tracker with SPA mode
+            WebTracker.init({
+                apiEndpoint: 'http://localhost:3001/api/track',
+                enableAutoTracking: true,
+                enableErrorTracking: true,
+                enablePerformanceTracking: true,
+                isSPA: true
+            });
+            
+            // Wait for tracker to initialize, then navigate to initial page
+            setTimeout(() => {
+                const hash = window.location.hash.replace('#', '');
+                if (hash && document.getElementById(hash)) {
+                    navigateTo(hash);
+                } else {
+                    navigateTo('home');
+                }
+                
+                log('Page loaded and tracker initialized');
+                log(`User ID: ${WebTracker.userId}`);
+                log(`Session ID: ${WebTracker.sessionId}`);
+                
+                trackAdImpressions();
+            }, 200);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    simulateUserJourney();
+                }
+            });
+            
+            showNotification('Analytics tracking active! Press Ctrl+S to simulate user journey.');
+        });
+
+        // Track ad clicks
+        function trackAdClick(adId, adType) {
+            log(`Ad clicked: ${adId} (${adType})`);
+            WebTracker.trackEvent('Advertising', 'Click', adId);
+            
+            if (!window.adsTracked) {
+                window.adsTracked = new Set();
+            }
+            window.adsTracked.add(adId);
+            
+            if (adType.includes('cta')) {
+                WebTracker.trackEvent('Advertising', 'Conversion', adId);
+                showNotification('Ad conversion tracked!');
+            }
+        }
+        
+        // Track ad impressions on page load
+        function trackAdImpressions() {
+            const ads = [
+                { id: 'banner-home-special-offer', page: 'home' },
+                { id: 'sidebar-products-newsletter', page: 'products' },
+                { id: 'sidebar-products-premium', page: 'products' }
+            ];
+            
+            ads.forEach(ad => {
+                const currentPage = document.querySelector('.page.active')?.id;
+                if (currentPage === ad.page) {
+                    log(`Ad impression: ${ad.id}`);
+                    WebTracker.trackEvent('Advertising', 'Impression', ad.id);
+                }
+            });
+        }
+
+        // Product functions
+        function viewProduct(productId) {
+            log(`Product viewed: ${productId}`);
+            showNotification(`Viewing product: ${productId}`);
+            WebTracker.trackEvent('Product', 'View', productId);
+        }
+
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            updateCartUI();
+            log(`Added to cart: ${product} ($${price})`);
+            showNotification(`${product} added to cart!`);
+            WebTracker.trackEvent('Ecommerce', 'Add to Cart', product, price);
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').textContent = cart.length;
+            
+            const cartItems = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            if (cart.length > 0) {
+                let html = '<h2>Your Items</h2>';
+                let subtotal = 0;
+                
+                cart.forEach((item, index) => {
+                    html += `
+                        <div style="padding: 1rem; background: #f8f9fa; margin: 1rem 0; border-radius: 8px;">
+                            <strong>${item.product}</strong> - $${item.price}
+                            <button class="btn" onclick="removeFromCart(${index})" style="float: right;">Remove</button>
+                        </div>
+                    `;
+                    subtotal += item.price;
+                });
+                
+                cartItems.innerHTML = html;
+                cartSummary.style.display = 'block';
+                
+                const tax = subtotal * 0.1;
+                const total = subtotal + tax;
+                
+                document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2);
+                document.getElementById('cart-tax').textContent = tax.toFixed(2);
+                document.getElementById('cart-total').textContent = total.toFixed(2);
+            } else {
+                cartItems.innerHTML = '<p>Your cart is empty. <a href="#" onclick="event.preventDefault();navigateTo(\'products\')">Continue shopping</a></p>';
+                cartSummary.style.display = 'none';
+            }
+        }
+
+        function removeFromCart(index) {
+            const item = cart[index];
+            cart.splice(index, 1);
+            updateCartUI();
+            log(`Removed from cart: ${item.product}`);
+            WebTracker.trackEvent('Ecommerce', 'Remove from Cart', item.product);
+        }
+
+        function checkout() {
+            log('Checkout initiated', { items: cart.length, total: document.getElementById('cart-total').textContent });
+            WebTracker.trackEvent('Ecommerce', 'Checkout', 'Start', parseFloat(document.getElementById('cart-total').textContent));
+            showModal('checkout', 'Checkout process would continue here...');
+        }
+
+        // Enhanced Form handlers
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            log('Contact form submitted', data);
+            WebTracker.trackEvent('Form', 'Submit', 'Contact Form');
+            showNotification('Message sent successfully!');
+            event.target.reset();
+            return false;
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            log('Login attempt', { email: data.email });
+            WebTracker.trackEvent('Form', 'Submit', 'Login Form');
+            WebTracker.trackEvent('User', 'Login', data.email);
+            showNotification('Login successful!');
+            return false;
+        }
+
+        //  Newsletter form handlers
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            log('Newsletter signup (main)', data);
+            WebTracker.trackEvent('Form', 'Submit', 'Newsletter Signup');
+            WebTracker.trackEvent('Marketing', 'Newsletter', 'Subscribe', 1);
+            showNotification('Successfully subscribed to newsletter!');
+            event.target.reset();
+            return false;
+        }
+
+        function handleSidebarNewsletterSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            log('Newsletter signup (sidebar)', data);
+            WebTracker.trackEvent('Form', 'Submit', 'Sidebar Newsletter');
+            WebTracker.trackEvent('Marketing', 'Newsletter', 'Subscribe Sidebar', 1);
+            showNotification('Welcome to our newsletter!');
+            event.target.reset();
+            return false;
+        }
+
+        function showAccountSection(section) {
+            log(`Account section: ${section}`);
+            WebTracker.trackEvent('Account', 'Navigate', section);
+            showModal(section, `${section} section would be displayed here`);
+        }
+
+        function showSignupForm() {
+            log('Signup form opened');
+            WebTracker.trackEvent('User', 'Signup', 'Start');
+            showModal('signup', 'Signup form would be displayed here');
+        }
+
+        // Filter products
+        function filterProducts(category) {
+            log(`Filter products: ${category}`);
+            WebTracker.trackEvent('Product', 'Filter', category);
+            
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                if (category === 'all' || product.dataset.category === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        // Social tracking
+        function trackSocial(platform) {
+            log(`Social link clicked: ${platform}`);
+            WebTracker.trackEvent('Social', 'Click', platform);
+            showNotification(`Opening ${platform}...`);
+        }
+
+        // Modal functions
+        function showModal(type, content) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            title.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            body.textContent = content || `This is the ${type} modal content.`;
+            
+            modal.classList.add('active');
+            log(`Modal opened: ${type}`);
+            WebTracker.trackEvent('UI', 'Modal Open', type);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            log('Modal closed');
+        }
+
+        // Notification
+        function showNotification(text) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notification-text').textContent = text;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Toggle console
+        function toggleConsole() {
+            const console = document.getElementById('tracking-console');
+            console.style.display = console.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Track scroll depth (for visual  only - tracker handles data tracking)
+        let scrollTimer;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                const scrollPercentage = Math.round((window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercentage > maxScroll) {
+                    maxScroll = scrollPercentage;
+                    if (scrollPercentage % 25 === 0) {
+                        log(`Scroll depth: ${scrollPercentage}%`);
+                    }
+                }
+            }, 100);
+        });
+
+        // Enhanced user journey simulation
+        function simulateUserJourney() {
+            log('Starting automated user journey simulation...');
+            
+            setTimeout(() => navigateTo('products'), 2000);
+            setTimeout(() => {
+                // Simulate form interaction
+                document.getElementById('category-filter').value = 'computers';
+                filterProducts('computers');
+            }, 3000);
+            setTimeout(() => addToCart('Laptop Pro', 1299), 4000);
+            setTimeout(() => navigateTo('contact'), 6000);
+            setTimeout(() => {
+                // Fill out contact form
+                document.getElementById('contact-name').value = 'Test User';
+                document.getElementById('contact-email').value = 'test@example.com';
+                document.getElementById('contact-subject').value = 'general';
+            }, 7000);
+            setTimeout(() => navigateTo('account'), 9000);
+            setTimeout(() => {
+                // Fill login form
+                document.getElementById('login-email').value = 'user@example.com';
+                document.getElementById('login-password').value = 'password123';
+            }, 10000);
+            setTimeout(() => navigateTo('cart'), 12000);
+            setTimeout(() => {
+                log('User journey simulation complete');
+                showNotification('Simulation complete! Check analytics dashboard for form data.');
+            }, 14000);
+        }
+
+        // Trigger an intentional error for testing
+        function triggerTestError() {
+            throw new Error('This is a test error for analytics tracking');
+        }
+    </script>
+</body>
+</html>
